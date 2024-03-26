@@ -26,6 +26,7 @@ public class Main {
                     "10 - Listar salas\n" +
                     "11 - Fazer reserva\n" +
                     "12 - Listar reservas\n" +
+                    "13 - Ver salas ocupadas por período\n" +
                     "0 - Sair"
             );
             String input = scanner.nextLine();
@@ -136,6 +137,16 @@ public class Main {
                     } else{
                         System.out.println("Não há salas cadastradas");
                     }
+                    break;
+                case 12:
+                    controlador.listarReservas();
+                    break;
+                case 13:
+                    System.out.println("Digite o início do intervalo:");
+                    String dataInicio = scanner.nextLine();
+                    System.out.println("Digite o fim do intervalo:");
+                    String dataFim = scanner.nextLine();
+                    controlador.listarSalasOcupadasPeriodo(dataInicio,dataFim);
                     break;
                 case 0:
                     return;

@@ -22,6 +22,9 @@ public class Controlador {
         predios.add(p);
         SalaReuniao s = new SalaReuniao(1, 100, p);
         salas.add(s);
+        Reserva r = new Reserva(LocalDate.of(2020, 2,18),LocalTime.of(15, 0),
+                LocalTime.of(16, 0),"Limpeza",s);
+        reservas.add(r);
     }
 
     private List<Equipamento> equipamentos = new ArrayList<>();
@@ -155,4 +158,20 @@ public class Controlador {
         }
     }
 
+
+    public void listarSalasOcupadasPeriodo(String dataInicio, String dataFim){
+        LocalDate inicio = LocalDate.parse(dataInicio);
+        LocalDate fim = LocalDate.parse(dataFim);
+
+        for(SalaReuniao sala : salas){
+            for (Reserva reserva : reservas){
+                if(reserva.getSala().equals(sala)){
+                    if(reserva.getDataAlocacao().isAfter(inicio) &&
+                    reserva.getDataAlocacao().isBefore(fim)){
+                        System.out.println("Sala " + sala.getNumero() + " ocupada na data " + reserva.getDataAlocacao());
+                    }
+                }
+            }
+        }
+    }
 }

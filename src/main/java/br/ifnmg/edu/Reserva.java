@@ -16,6 +16,21 @@ public class Reserva {
     private SalaReuniao sala;
     private Funcionario locador;
 
+    public Reserva() {
+    }
+
+    public Reserva(LocalDate dataAlocacao,
+                   LocalTime horaInicio,
+                   LocalTime horaFim,
+                   String assunto,
+                   SalaReuniao sala) {
+        this.dataAlocacao = dataAlocacao;
+        this.horaInicio = horaInicio;
+        this.horaFim = horaFim;
+        this.assunto = assunto;
+        this.sala = sala;
+    }
+
     public Equipamento criaEquipamento() {
 
         return new Equipamento();
