@@ -43,11 +43,11 @@ public class MenuFuncionarios {
         new Controlador().criaFuncionario(nomeFuncionario, cargoFuncionario, ramalFuncionario);
     }
 
-    private static void listarFuncionarios() {
+    protected static void listarFuncionarios() {
         List<String> funcionarios = new Controlador().getFuncionarios();
         System.out.println("Funcionários: ");
-        for (String f : funcionarios) {
-            System.out.println(f);
+        for (int i = 0; i < funcionarios.size(); i++) {
+            System.out.println(i + " - " + funcionarios.get(i));
         }
     }
 }

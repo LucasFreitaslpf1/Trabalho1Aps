@@ -14,21 +14,21 @@ public class Reserva {
     private String assunto;
     private List<Equipamento> equipamentos = new ArrayList<>();
     private SalaReuniao sala;
-    private Funcionario locador;
+    private Funcionario funcionario;
 
     public Reserva() {
     }
 
-    public Reserva(LocalDate dataAlocacao,
-                   LocalTime horaInicio,
-                   LocalTime horaFim,
-                   String assunto,
-                   SalaReuniao sala) {
+    public Reserva(LocalDate dataAlocacao, LocalTime horaInicio,
+                   LocalTime horaFim, String assunto, List<Equipamento> equipamentos,
+                   SalaReuniao sala, Funcionario funcionario) {
         this.dataAlocacao = dataAlocacao;
         this.horaInicio = horaInicio;
         this.horaFim = horaFim;
         this.assunto = assunto;
+        this.equipamentos = equipamentos;
         this.sala = sala;
+        this.funcionario = funcionario;
     }
 
     public Equipamento criaEquipamento() {
@@ -92,12 +92,12 @@ public class Reserva {
         this.sala = sala;
     }
 
-    public Funcionario getLocador() {
-        return locador;
+    public Funcionario getFuncionario() {
+        return funcionario;
     }
 
-    public void setLocador(Funcionario locador) {
-        this.locador = locador;
+    public void setFuncionario(Funcionario funcionario) {
+        this.funcionario = funcionario;
     }
 
     public void adicionarEquipamento(Equipamento e){
@@ -114,7 +114,7 @@ public class Reserva {
 
     @Override
     public int hashCode() {
-        return Objects.hash(dataAlocacao, horaInicio, horaFim, assunto, equipamentos, sala, locador);
+        return Objects.hash(dataAlocacao, horaInicio, horaFim, assunto, equipamentos, sala, funcionario);
     }
 
     @Override
@@ -126,6 +126,7 @@ public class Reserva {
                 ", assunto='" + assunto + '\'' +
                 ", equipamentos=" + equipamentos +
                 ", sala=" + sala +
+                ", funcionario=" + funcionario +
                 '}';
     }
 }

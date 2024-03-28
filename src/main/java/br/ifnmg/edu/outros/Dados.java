@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -19,15 +20,13 @@ public class Dados {
         predios.add(p);
         SalaReuniao s = new SalaReuniao(1, 100, p);
         salas.add(s);
+        Funcionario f = new Funcionario("Joao", "Professor", "123");
+        funcionarios.add(f);
+        Equipamento e = new Equipamento("Giz", 12);
+        equipamentos.add(e);
         Reserva r = new Reserva(LocalDate.of(2020, 2, 18), LocalTime.of(15, 0),
-                LocalTime.of(16, 0), "Limpeza", s);
-        Reserva r1 = new Reserva(LocalDate.of(2020, 2, 19), LocalTime.of(15, 0),
-                LocalTime.of(16, 0), "Limpeza", s);
-        Reserva r2 = new Reserva(LocalDate.of(2020, 3, 17), LocalTime.of(15, 0),
-                LocalTime.of(16, 0), "Limpeza", s);
+                LocalTime.of(16, 0), "Limpeza", new ArrayList<>(List.of(e)), s, f);
         reservas.add(r);
-        reservas.add(r1);
-        reservas.add(r2);
     }
 
     private static List<Equipamento> equipamentos = new ArrayList<>();
@@ -37,42 +36,70 @@ public class Dados {
     private static List<SalaReuniao> salas = new ArrayList<>();
     private static List<Reserva> reservas = new ArrayList<>();
 
-    public static void salvarEquipamento(Equipamento e) {
-        equipamentos.add(e);
+    public static boolean salvarEquipamento(Equipamento e) {
+        try {
+            equipamentos.add(e);
+        } catch (Exception exception) {
+            return false;
+        }
+        return true;
     }
 
-    public static void salvarCampus(Campus c) {
-        campi.add(c);
+    public static boolean salvarCampus(Campus c) {
+        try {
+            campi.add(c);
+        } catch (Exception exception) {
+            return false;
+        }
+        return true;
     }
 
-    public static void salvarFuncionario(Funcionario f) {
-        funcionarios.add(f);
+    public static boolean salvarFuncionario(Funcionario f) {
+        try {
+            funcionarios.add(f);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 
-    public static void salvarPredio(Predio p) {
-        predios.add(p);
+    public static boolean salvarPredio(Predio p) {
+        try {
+            predios.add(p);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
-    public static void salvarSala(SalaReuniao s) {
-        salas.add(s);
+    public static boolean salvarSala(SalaReuniao s) {
+        try {
+            salas.add(s);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
-    public static void salvarReserva(Reserva r) {
+    public static boolean salvarReserva(Reserva r) {
 
         for (Reserva reserva : reservas) {
             if (reserva.getSala().equals(r.getSala()) && r.getDataAlocacao().isEqual(reserva.getDataAlocacao())) {
-                if (r.getHoraInicio().isAfter(reserva.getHoraInicio()) &&
-                        r.getHoraInicio().isBefore(reserva.getHoraFim()) ||
-                        r.getHoraFim().isAfter(reserva.getHoraInicio()) &&
-                                r.getHoraFim().isBefore(reserva.getHoraFim())
-
-                ) {
+                if (!r.getHoraFim().isBefore(reserva.getHoraInicio()) &&
+                        !r.getHoraFim().isBefore(reserva.getHoraInicio())) {
                     System.out.println("Conflito de horário dessa sala!");
-                    return;
+                    return false;
                 }
             }
         }
-        reservas.add(r);
+
+        try {
+            reservas.add(r);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 
     public static List<String> getEquipamentos() {
@@ -128,9 +155,9 @@ public class Dados {
                 if (reserva.getSala().equals(sala)) {
                     if (reserva.getDataAlocacao().isAfter(inicio) ||
                             reserva.getDataAlocacao().isEqual(inicio) &&
-                                    reserva.getDataAlocacao().isBefore(fim) ||
-                            reserva.getDataAlocacao().isEqual(fim)) {
-                        salasLivres.add("Sala " + sala.getNumero() + " ocupada na data " + reserva.getDataAlocacao());
+                                    reserva.getDataAlocacao().isBefore(fim)) {
+                        salasLivres.add("Sala " + sala.getNumero() + " ocupada na data " + reserva.getDataAlocacao()
+                                + " entre às " + reserva.getHoraInicio() + " e " + reserva.getHoraFim());
                     }
                 }
             }
@@ -209,19 +236,19 @@ public class Dados {
         return salasOrdem;
     }
 
-    public static List<String> getSalasLivres(LocalDate dataDesejada, LocalTime horaInicio, LocalTime horaFim){
+    public static List<String> getSalasLivres(LocalDate dataDesejada, LocalTime horaInicio, LocalTime horaFim) {
         List<String> salasLivres = new ArrayList<>();
 
 
-        for (int i = 0; i<salas.size(); i++) {
+        for (int i = 0; i < salas.size(); i++) {
             for (Reserva reserva : reservas) {
                 if (salas.get(i).equals(reserva.getSala())) {
-                    if (reserva.getDataAlocacao().isEqual(dataDesejada) &&
-                            !(!horaInicio.isBefore(reserva.getHoraInicio()) &&
-                                    !horaInicio.isAfter(reserva.getHoraFim()) ||
-                                    !horaFim.isBefore(reserva.getHoraInicio()) &&
-                                            !horaFim.isAfter(reserva.getHoraFim()))
-                    ) {
+                    if (reserva.getDataAlocacao().isEqual(dataDesejada)) {
+                        if(horaInicio.isBefore(reserva.getHoraFim()) &&
+                        horaFim.isBefore(reserva.getHoraInicio()) ){
+                            salasLivres.add(i + " - sala: " + salas.get(i).getNumero());
+                        }
+                    } else{
                         salasLivres.add(i + " - sala: " + salas.get(i).getNumero());
                     }
                 }
@@ -230,15 +257,19 @@ public class Dados {
         return salasLivres;
     }
 
-    public static Campus getCampus(Integer idx){
+    public static Campus getCampus(Integer idx) {
         return campi.get(idx);
     }
 
-    public static Predio getPredio(Integer idx){
+    public static Predio getPredio(Integer idx) {
         return predios.get(idx);
     }
 
-    public static SalaReuniao getSala(Integer idx){
+    public static SalaReuniao getSala(Integer idx) {
         return salas.get(idx);
+    }
+
+    public static Funcionario getFuncionario(Integer idx) {
+        return funcionarios.get(idx);
     }
 }

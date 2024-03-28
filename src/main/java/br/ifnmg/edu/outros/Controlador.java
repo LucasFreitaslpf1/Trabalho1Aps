@@ -17,7 +17,9 @@ public class Controlador {
         Equipamento e = new Reserva().criaEquipamento();
         e.setNome(nome);
         e.setPatrimonio(patrimonio);
-        Dados.salvarEquipamento(e);
+        if(Dados.salvarEquipamento(e)){
+            System.out.println("Equipamento criado com sucesso.");
+        }
     }
 
     public List<String> getEquipamentos() {
@@ -31,7 +33,9 @@ public class Controlador {
         c.setNumero(numero);
         c.setBairro(bairro);
         c.setCidade(cidade);
-        Dados.salvarCampus(c);
+        if(Dados.salvarCampus(c)){
+            System.out.println("Campus criado com sucesso.");
+        }
     }
 
 
@@ -45,7 +49,9 @@ public class Controlador {
         f.setNome(nome);
         f.setRamal(ramal);
         f.setCargo(cargo);
-        Dados.salvarFuncionario(f);
+        if(Dados.salvarFuncionario(f)){
+            System.out.println("Funcionário criado com sucesso.");
+        }
     }
 
     public List<String> getFuncionarios() {
@@ -64,7 +70,9 @@ public class Controlador {
         Predio p = new Reserva().criaFuncionario().criaCampus().criaPredio();
         p.setNome(nome);
         p.setCampus(Dados.getCampus(numeroCampus));
-        Dados.salvarPredio(p);
+        if(Dados.salvarPredio(p)){
+            System.out.println("Prédio criado com sucesso.");
+        }
     }
 
     public List<String> getPredios() {
@@ -76,7 +84,9 @@ public class Controlador {
         s.setQtdLugares(qtdLugares);
         s.setNumero(numero);
         s.setPredio(Dados.getPredio(numPredio));
-        Dados.salvarSala(s);
+        if(Dados.salvarSala(s)){
+            System.out.println("Sala criada com sucesso.");
+        }
     }
 
     public List<String> getSalas() {
@@ -88,7 +98,8 @@ public class Controlador {
     }
 
     public void criaReserva(String data, String horaInicio, String horaFim,
-                            String assunto, ArrayList<Integer> equipamentos, Integer numSala) {
+                            String assunto, ArrayList<Integer> equipamentos, Integer numSala,
+                            Integer numFuncionario) {
 
         Reserva r = new Reserva();
         r.setAssunto(assunto);
@@ -97,15 +108,18 @@ public class Controlador {
             r.setHoraInicio(LocalTime.parse(horaInicio));
             r.setHoraFim(LocalTime.parse(horaFim));
         } catch (Exception e) {
-            System.out.println("Data/Hora inválidos " + e.getMessage());
+            System.out.println("Data/Hora inválidos");
             return;
         }
         r.setSala(Dados.getSala(numSala));
         for (Integer e : equipamentos) {
             r.adicionarEquipamento(Dados.getEquipamento(e));
         }
+        r.setFuncionario(Dados.getFuncionario(numFuncionario));
 
-        Dados.salvarReserva(r);
+        if(Dados.salvarReserva(r)){
+            System.out.println("Reserva criada com sucesso.");
+        }
     }
 
     public List<String> getReservas() {
@@ -147,5 +161,9 @@ public class Controlador {
         }
 
         return Dados.getSalasLivres(dataDesejada, inicio, fim);
+    }
+
+    public boolean temFuncionario(){
+        return !Dados.getFuncionarios().isEmpty();
     }
 }
