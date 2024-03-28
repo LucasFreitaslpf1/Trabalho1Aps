@@ -13,7 +13,14 @@ public class MenuEquipamento
             System.out.println("1 - Adicionar equipamento\n" +
                     "2 - Listar equipamento\n" +
                     "0 - Sair");
-            int escolha = Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine();;
+            int escolha;
+            try {
+                escolha = Integer.parseInt(input);
+            } catch (Exception e){
+                System.out.println("Entrada inválida\n");
+                continue;
+            }
             switch (escolha){
                 case 1:
                     adicionarEquipamento(scanner);
@@ -39,7 +46,15 @@ public class MenuEquipamento
         System.out.println("Insira nome do equipamento: ");
         String nomeEquipamento = scanner.nextLine();
         System.out.println("Insira patrimonio do equipamento: ");
-        Integer patrimonioEquipamento = Integer.parseInt(scanner.nextLine());
+        int patrimonioEquipamento;
+        while(true){
+            try {
+                patrimonioEquipamento = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (Exception e){
+                System.out.println("Valor inválido, digite novamente: ");
+            }
+        }
         new Controlador().criaEquipamento(nomeEquipamento, patrimonioEquipamento);
     }
 }

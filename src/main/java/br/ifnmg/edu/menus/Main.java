@@ -26,7 +26,17 @@ public class Main {
                     "5 - Menu de Salas\n" +
                     "0 - Sair"
             );
-            int opcao = Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine();
+
+            int opcao;
+
+            try {
+                opcao = Integer.parseInt(input);
+            } catch (Exception e){
+                System.out.println("Entrada inválida\n");
+                continue;
+            }
+
 
             switch (opcao) {
                 case 1:
@@ -40,8 +50,10 @@ public class Main {
                     break;
                 case 4:
                     MenuReservas.menuReservas(scanner);
+                    break;
                 case 5:
                     MenuSala.menuSala(scanner);
+                    break;
                 case 0:
                     return;
             }

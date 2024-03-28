@@ -16,7 +16,14 @@ public class MenuSala {
                     "3 - Ver salas ocupadas\n"+
                     "4 - Listagem de salas por dia, semana ou mês\n" +
                     "0 - Sair");
-            int escolha = Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine();;
+            int escolha;
+            try {
+                escolha = Integer.parseInt(input);
+            } catch (Exception e){
+                System.out.println("Entrada inválida\n");
+                continue;
+            }
             switch (escolha){
                 case 1:
                     criarSala(scanner);
@@ -40,12 +47,36 @@ public class MenuSala {
         Controlador controlador = new Controlador();
         if (controlador.temPredio()) {
             System.out.println("Digite o numero da sala: ");
-            Integer numeroSala = Integer.parseInt(scanner.nextLine());
+            int numeroSala;
+            while(true){
+                try {
+                    numeroSala = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (Exception e){
+                    System.out.println("Valor inválido, digite novamente: ");
+                }
+            }
             System.out.println("Digite a quantidade de lugares: ");
-            Integer lugaresSala = Integer.parseInt(scanner.nextLine());
+            int lugaresSala;
+            while(true){
+                try {
+                    lugaresSala = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (Exception e){
+                    System.out.println("Valor inválido, digite novamente: ");
+                }
+            }
             System.out.println("Selecione um prédio");
             listarPredios();
-            Integer predioSala = Integer.parseInt(scanner.nextLine());
+            int predioSala;
+            while(true){
+                try {
+                    predioSala = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (Exception e){
+                    System.out.println("Valor inválido, digite novamente: ");
+                }
+            }
             controlador.criarSala(numeroSala, lugaresSala, predioSala);
         } else {
             System.out.println("Não há prédios cadastrados");
@@ -61,9 +92,9 @@ public class MenuSala {
     }
 
     private static void verSalasOcupadas(Scanner scanner) {
-        System.out.println("Digite o início do intervalo:");
+        System.out.println("Digite o início do intervalo (dia/mês/ano):");
         String dataInicio = scanner.nextLine();
-        System.out.println("Digite o fim do intervalo:");
+        System.out.println("Digite o fim do intervalo (dia/mês/ano):");
         String dataFim = scanner.nextLine();
         for(String sala : new Controlador().getSalasOcupadasPeriodo(dataInicio, dataFim)){
             System.out.println(sala);
@@ -75,7 +106,15 @@ public class MenuSala {
         System.out.println("1 - Por dia");
         System.out.println("2 - Por mês");
         System.out.println("3 - Por semana");
-        Integer escolhaListagem = Integer.parseInt(scanner.nextLine());
+        int escolhaListagem;
+        while(true){
+            try {
+                escolhaListagem = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (Exception e){
+                System.out.println("Valor inválido, digite novamente: ");
+            }
+        }
         for(String s : new Controlador().getSalasOrdemCronologica(escolhaListagem)){
             System.out.println(s);
         }

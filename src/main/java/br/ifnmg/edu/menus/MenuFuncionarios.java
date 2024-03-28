@@ -12,7 +12,14 @@ public class MenuFuncionarios {
             System.out.println("\n1 - Adicionar funcionário\n" +
                     "2 - Listar funcionários\n" +
                     "0 - Sair");
-            int escolha = Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine();;
+            int escolha;
+            try {
+                escolha = Integer.parseInt(input);
+            } catch (Exception e){
+                System.out.println("Entrada inválida\n");
+                continue;
+            }
             switch (escolha){
                 case 1:
                     criarFuncionario(scanner);

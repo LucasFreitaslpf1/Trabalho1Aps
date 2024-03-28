@@ -16,7 +16,15 @@ public class MenuReservas {
                     "2 - Listar reservas\n" +
                     "3 - Criar reserva a partir de salas livres\n" +
                     "0 - Sair");
-            int escolha = Integer.parseInt(scanner.nextLine());
+            String input = scanner.nextLine();
+            ;
+            int escolha;
+            try {
+                escolha = Integer.parseInt(input);
+            } catch (Exception e) {
+                System.out.println("Entrada inválida\n");
+                continue;
+            }
             switch (escolha) {
                 case 1:
                     criarReserva(scanner);
@@ -25,7 +33,7 @@ public class MenuReservas {
                     listarReservas();
                     break;
                 case 3:
-
+                    criarReservaSalasLivres(scanner);
                 case 0:
                     return;
             }
@@ -54,19 +62,41 @@ public class MenuReservas {
 
             System.out.println("Deseja adicionar equipamentos?");
             System.out.println("1 - Sim\n0 - Não");
-            int opcao = Integer.parseInt(scanner.nextLine());
+            int opcao;
+            while (true) {
+                try {
+                    opcao = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Valor inválido, digite novamente: ");
+                }
+            }
             ArrayList<Integer> equipamentos = new ArrayList<>();
-            while (opcao >= 0) {
+            while (opcao > 0) {
                 System.out.println("Escolha um equipamento: (-1 para sair)");
                 listarEquipamentos();
-                opcao = Integer.parseInt(scanner.nextLine());
+                while (true) {
+                    try {
+                        opcao = Integer.parseInt(scanner.nextLine());
+                        break;
+                    } catch (Exception e) {
+                        System.out.println("Valor inválido, digite novamente: ");
+                    }
+                }
                 if (opcao >= 0) equipamentos.add(opcao);
             }
 
             System.out.println("Escolha uma sala: ");
             listarSalas();
-            Integer numSalaReserva = Integer.parseInt(scanner.nextLine());
-
+            int numSalaReserva;
+            while (true) {
+                try {
+                    numSalaReserva = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (Exception e) {
+                    System.out.println("Valor inválido, digite novamente: ");
+                }
+            }
 
             controlador.criaReserva(dataReserva, horaInicioReserva, horaFimReserva, assuntoResera, equipamentos, numSalaReserva);
         } else {
@@ -77,11 +107,11 @@ public class MenuReservas {
     private static void criarReservaSalasLivres(Scanner scanner) {
         Controlador controlador = new Controlador();
         if (controlador.temSala()) {
-            System.out.println("Digite a data:");
+            System.out.println("Digite a data (dia/mês/ano):");
             String dataSalaLivre = scanner.nextLine();
-            System.out.println("Digite a hora de inicio: ");
+            System.out.println("Digite a hora de inicio (horas:minutos) : ");
             String horaInicioSalaLivre = scanner.nextLine();
-            System.out.println("Digite a hora de inicio: ");
+            System.out.println("Digite a hora de término (horas:minutos): ");
             String horaFimSalaLivre = scanner.nextLine();
             List<String> salas = controlador.getSalasLivres(dataSalaLivre, horaInicioSalaLivre, horaFimSalaLivre);
             if (!salas.isEmpty()) {

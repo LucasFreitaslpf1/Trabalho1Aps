@@ -14,7 +14,16 @@ public class MenuCampusPredios {
                     "3 - Criar prédio\n" +
                     "4 - Listar prédios\n" +
                     "0 - Sair");
-            int escolha = Integer.parseInt(scanner.nextLine());
+
+            String input = scanner.nextLine();;
+            int escolha;
+            try {
+                escolha = Integer.parseInt(input);
+            } catch (Exception e){
+                System.out.println("Entrada inválida\n");
+                continue;
+            }
+
             switch (escolha){
                 case 1:
                     adicionarCampus(scanner);
@@ -42,7 +51,15 @@ public class MenuCampusPredios {
         System.out.println("Digite o Bairro do Campus: ");
         String bairroCampus = scanner.nextLine();
         System.out.println("Digite o numero do Campus: ");
-        Integer numeroCampus = Integer.parseInt(scanner.nextLine());
+        int numeroCampus;
+        while(true){
+            try {
+                numeroCampus = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (Exception e){
+                System.out.println("Valor inválido, digite novamente: ");
+            }
+        }
         System.out.println("Digite a cidade do Campus: ");
         String cidadeCampus = scanner.nextLine();
         new Controlador().criaCampus(nomeCampus, ruaCampus, numeroCampus, bairroCampus, cidadeCampus);
@@ -62,7 +79,15 @@ public class MenuCampusPredios {
             String nomePredio = scanner.nextLine();
             System.out.println("Selecione um campus");
             listarCampus();
-            Integer campusPredio = Integer.parseInt(scanner.nextLine());
+            int campusPredio;
+            while(true){
+                try {
+                    campusPredio = Integer.parseInt(scanner.nextLine());
+                    break;
+                } catch (Exception e){
+                    System.out.println("Valor inválido, digite novamente: ");
+                }
+            }
             controlador.criaPredio(nomePredio, campusPredio);
         } else {
             System.out.println("Não há campi cadastrados");

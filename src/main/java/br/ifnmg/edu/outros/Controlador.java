@@ -1,9 +1,11 @@
 package br.ifnmg.edu.outros;
 
 import br.ifnmg.edu.dominio.*;
+import com.sun.source.tree.TryTree;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class Controlador {
@@ -90,10 +92,14 @@ public class Controlador {
 
         Reserva r = new Reserva();
         r.setAssunto(assunto);
-        r.setDataAlocacao(LocalDate.parse(data));
-
-        r.setHoraInicio(LocalTime.parse(horaInicio));
-        r.setHoraFim(LocalTime.parse(horaFim));
+        try {
+            r.setDataAlocacao(LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            r.setHoraInicio(LocalTime.parse(horaInicio));
+            r.setHoraFim(LocalTime.parse(horaFim));
+        } catch (Exception e) {
+            System.out.println("Data/Hora inválidos " + e.getMessage());
+            return;
+        }
         r.setSala(Dados.getSala(numSala));
         for (Integer e : equipamentos) {
             r.adicionarEquipamento(Dados.getEquipamento(e));
@@ -107,10 +113,18 @@ public class Controlador {
     }
 
     public List<String> getSalasOcupadasPeriodo(String dataInicio, String dataFim) {
-        LocalDate inicio = LocalDate.parse(dataInicio);
-        LocalDate fim = LocalDate.parse(dataFim);
+        LocalDate inicio;
+        LocalDate fim;
 
-        return Dados.getSalasPeriodo(inicio,fim);
+        try {
+            inicio = LocalDate.parse(dataInicio, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            fim = LocalDate.parse(dataFim, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } catch (Exception e) {
+            System.out.println("Data inválida");
+            return new ArrayList<>();
+        }
+
+        return Dados.getSalasPeriodo(inicio, fim);
     }
 
     public List<String> getSalasOrdemCronologica(Integer escolha) {
@@ -119,10 +133,19 @@ public class Controlador {
 
     public List<String> getSalasLivres(String data, String horaInicio, String horaFim) {
 
-        LocalDate dataDesejada = LocalDate.parse(data);
-        LocalTime inicio = LocalTime.parse(horaInicio);
-        LocalTime fim = LocalTime.parse(horaFim);
+        LocalDate dataDesejada;
+        LocalTime inicio;
+        LocalTime fim;
 
-        return Dados.getSalasLivres(dataDesejada,inicio,fim);
+        try {
+            dataDesejada = LocalDate.parse(data, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            inicio = LocalTime.parse(horaInicio);
+            fim = LocalTime.parse(horaFim);
+        } catch (Exception e) {
+            System.out.println("Data/Hora inválidos");
+            return new ArrayList<>();
+        }
+
+        return Dados.getSalasLivres(dataDesejada, inicio, fim);
     }
 }
