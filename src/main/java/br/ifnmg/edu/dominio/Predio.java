@@ -1,4 +1,4 @@
-package br.ifnmg.edu;
+package br.ifnmg.edu.dominio;
 
 import java.util.ArrayList;
 import java.util.List;
