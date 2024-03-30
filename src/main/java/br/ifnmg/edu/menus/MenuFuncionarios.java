@@ -1,9 +1,12 @@
 package br.ifnmg.edu.menus;
 
 import br.ifnmg.edu.outros.Controlador;
+import br.ifnmg.edu.outros.Dados;
 
 import java.util.List;
 import java.util.Scanner;
+
+import static br.ifnmg.edu.menus.MenuCampusPredios.listarCampus;
 
 public class MenuFuncionarios {
     public static void menuFuncionarios(Scanner scanner) {
@@ -34,13 +37,28 @@ public class MenuFuncionarios {
     }
 
     private static void criarFuncionario(Scanner scanner) {
+        if(!new Controlador().temCampus()){
+            System.out.println("Não há campus cadastrados");
+            return;
+        }
         System.out.println("Digite o nome do funcionário: ");
         String nomeFuncionario = scanner.nextLine();
         System.out.println("Digite o cargo do funcionário: ");
         String cargoFuncionario = scanner.nextLine();
         System.out.println("Digite o ramal do funcionário: ");
         String ramalFuncionario = scanner.nextLine();
-        new Controlador().criaFuncionario(nomeFuncionario, cargoFuncionario, ramalFuncionario);
+        System.out.println("Escolha o campus: ");
+        listarCampus();
+        int numCampus;
+        while (true) {
+            try {
+                numCampus = Integer.parseInt(scanner.nextLine());
+                break;
+            } catch (Exception e) {
+                System.out.println("Valor inválido, digite novamente: ");
+            }
+        }
+        new Controlador().criaFuncionario(nomeFuncionario, cargoFuncionario, ramalFuncionario,numCampus);
     }
 
     protected static void listarFuncionarios() {

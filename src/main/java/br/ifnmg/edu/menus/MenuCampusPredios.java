@@ -65,7 +65,7 @@ public class MenuCampusPredios {
         new Controlador().criaCampus(nomeCampus, ruaCampus, numeroCampus, bairroCampus, cidadeCampus);
     }
 
-    private static void listarCampus() {
+    protected static void listarCampus() {
         List<String> campi = new Controlador().listarCampi();
         for (int i = 0; i < campi.size(); i++) {
             System.out.println(i + " - " + campi.get(i));

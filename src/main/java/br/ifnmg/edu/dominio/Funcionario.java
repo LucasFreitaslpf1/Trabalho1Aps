@@ -5,6 +5,7 @@ public class Funcionario {
     private String nome;
     private String cargo;
     private String ramal;
+    private Campus campus;
 
     public String getNome() {
         return nome;
@@ -28,6 +29,14 @@ public class Funcionario {
 
     public void setRamal(String ramal) {
         this.ramal = ramal;
+    }
+
+    public Campus getCampus() {
+        return campus;
+    }
+
+    public void setCampus(Campus campus) {
+        this.campus = campus;
     }
 
     public Campus criaCampus(){

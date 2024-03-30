@@ -149,7 +149,9 @@ public class MenuReservas {
                     System.out.println(sala);
                 }
                 Integer numSalaLivre = Integer.parseInt(scanner.nextLine());
-                criarReservaSalaLivre(scanner, numSalaLivre, dataSalaLivre, horaInicioSalaLivre, horaFimSalaLivre);
+                criarReservaSalaLivre(scanner,
+                        controlador.salaLivreToSala(numSalaLivre,dataSalaLivre,horaInicioSalaLivre,horaFimSalaLivre),
+                        dataSalaLivre, horaInicioSalaLivre, horaFimSalaLivre);
             } else {
                 System.out.println("Não há salas livres.");
             }

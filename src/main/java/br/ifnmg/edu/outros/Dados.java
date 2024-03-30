@@ -7,7 +7,6 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.temporal.TemporalAdjusters;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
@@ -26,7 +25,10 @@ public class Dados {
         equipamentos.add(e);
         Reserva r = new Reserva(LocalDate.of(2020, 2, 18), LocalTime.of(15, 0),
                 LocalTime.of(16, 0), "Limpeza", new ArrayList<>(List.of(e)), s, f);
+        Reserva r1 = new Reserva(LocalDate.of(2020, 3, 18), LocalTime.of(15, 0),
+                LocalTime.of(16, 0), "Limpeza", new ArrayList<>(List.of(e)), s, f);
         reservas.add(r);
+        reservas.add(r1);
     }
 
     private static List<Equipamento> equipamentos = new ArrayList<>();
@@ -102,62 +104,49 @@ public class Dados {
         return true;
     }
 
-    public static List<String> getEquipamentos() {
-        List<String> equips = new ArrayList<>();
-        equipamentos.forEach(equipamento -> equips.add(equipamento.toString()));
+    public static List<Equipamento> getEquipamentos() {
 
-        return equips;
+        return equipamentos;
     }
 
-    public static List<String> getCampi() {
-        List<String> todosCampi = new ArrayList<>();
-        campi.forEach(campus -> todosCampi.add(campus.toString()));
+    public static List<Campus> getCampi() {
 
-        return todosCampi;
+        return campi;
     }
 
-    public static List<String> getPredios() {
-        List<String> todosPredios = new ArrayList<>();
-        predios.forEach(predio -> todosPredios.add(predio.toString()));
+    public static List<Predio> getPredios() {
 
-        return todosPredios;
+        return predios;
     }
 
-    public static List<String> getFuncionarios() {
-        List<String> todosFuncionarios = new ArrayList<>();
-        funcionarios.forEach(funcionario -> todosFuncionarios.add(funcionario.toString()));
+    public static List<Funcionario> getFuncionarios() {
 
-        return todosFuncionarios;
+        return funcionarios;
     }
 
-    public static List<String> getSalas() {
-        List<String> todasSalas = new ArrayList<>();
-        salas.forEach(sala -> todasSalas.add(sala.toString()));
+    public static List<SalaReuniao> getSalas() {
 
-        return todasSalas;
+        return salas;
     }
 
-    public static List<String> getReservas() {
-        List<String> todasReservas = new ArrayList<>();
-        reservas.forEach(reserva -> todasReservas.add(reserva.toString()));
+    public static List<Reserva> getReservas() {
 
-        return todasReservas;
+        return reservas;
     }
 
     public static Equipamento getEquipamento(Integer idx) {
         return equipamentos.get(idx);
     }
 
-    public static List<String> getSalasPeriodo(LocalDate inicio, LocalDate fim) {
-        List<String> salasLivres = new ArrayList<>();
+    public static List<Reserva> getReservasPeriodo(LocalDate inicio, LocalDate fim) {
+        List<Reserva> salasLivres = new ArrayList<>();
         for (SalaReuniao sala : salas) {
             for (Reserva reserva : reservas) {
                 if (reserva.getSala().equals(sala)) {
                     if (reserva.getDataAlocacao().isAfter(inicio) ||
                             reserva.getDataAlocacao().isEqual(inicio) &&
                                     reserva.getDataAlocacao().isBefore(fim)) {
-                        salasLivres.add("Sala " + sala.getNumero() + " ocupada na data " + reserva.getDataAlocacao()
-                                + " entre às " + reserva.getHoraInicio() + " e " + reserva.getHoraFim());
+                        salasLivres.add(reserva);
                     }
                 }
             }
@@ -165,7 +154,7 @@ public class Dados {
         return salasLivres;
     }
 
-    public static List<String> listaSalasOrdemCronologica(int escolha) {
+    public static List<Reserva> listaSalasOrdemCronologica(int escolha) {
         List<String> salasOrdem = new ArrayList<>();
         List<Reserva> reservasOrdem = new ArrayList<Reserva>(reservas);
         reservasOrdem.sort(
@@ -184,72 +173,24 @@ public class Dados {
                 }
         );
 
-        switch (escolha) {
-            case 1: // DIA
-                for (Reserva reserva : reservasOrdem) {
-                    salasOrdem.add("Sala " + reserva.getSala().getNumero() + " no dia "
-                            + reserva.getDataAlocacao());
-                }
-                break;
-            case 2:
-                var ultimoMes = reservasOrdem.get(0).getDataAlocacao().getMonth();
-                salasOrdem.add(ultimoMes.toString());
-                for (Reserva reserva : reservasOrdem) {
-                    if (reserva.getDataAlocacao().getMonth() != ultimoMes) {
-                        System.out.println(reserva.getDataAlocacao().getMonth());
-                    }
-                    salasOrdem.add("Sala " + reserva.getSala().getNumero() + " no dia "
-                            + reserva.getDataAlocacao());
-                    ultimoMes = reserva.getDataAlocacao().getMonth();
-                }
-                break;
-            case 3:
-                var data = reservasOrdem.get(0).getDataAlocacao();
-                LocalDate inicioSemana = data.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-                LocalDate fimSemana = inicioSemana.plusDays(6L);
 
-                salasOrdem.add("Entre: " + inicioSemana + " e " + fimSemana);
-                for (Reserva reserva : reservasOrdem) {
-
-                    if (!reserva.getDataAlocacao()
-                            .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY))
-                            .isEqual(inicioSemana)) {
-
-                        inicioSemana = reserva.getDataAlocacao()
-                                .with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-                        fimSemana = inicioSemana.plusDays(6L);
-
-                        salasOrdem.add("Entre: " + inicioSemana + " e " + fimSemana);
-                    }
-
-                    if (reserva.getDataAlocacao().isBefore(fimSemana) ||
-                            reserva.getDataAlocacao().isEqual(fimSemana) &&
-                                    reserva.getDataAlocacao().isAfter(inicioSemana) ||
-                            reserva.getDataAlocacao().isEqual(inicioSemana)) {
-                        salasOrdem.add("Sala " + reserva.getSala().getNumero() + " no dia "
-                                + reserva.getDataAlocacao());
-                    }
-
-                }
-                break;
-        }
-        return salasOrdem;
+        return reservasOrdem;
     }
 
-    public static List<String> getSalasLivres(LocalDate dataDesejada, LocalTime horaInicio, LocalTime horaFim) {
-        List<String> salasLivres = new ArrayList<>();
+    public static List<SalaReuniao> getSalasLivres(LocalDate dataDesejada, LocalTime horaInicio, LocalTime horaFim) {
+        List<SalaReuniao> salasLivres = new ArrayList<>();
 
 
-        for (int i = 0; i < salas.size(); i++) {
+        for (SalaReuniao sala : salas) {
             for (Reserva reserva : reservas) {
-                if (salas.get(i).equals(reserva.getSala())) {
+                if (sala.equals(reserva.getSala())) {
                     if (reserva.getDataAlocacao().isEqual(dataDesejada)) {
-                        if(horaInicio.isBefore(reserva.getHoraFim()) &&
-                        horaFim.isBefore(reserva.getHoraInicio()) ){
-                            salasLivres.add(i + " - sala: " + salas.get(i).getNumero());
+                        if (horaInicio.isBefore(reserva.getHoraFim()) &&
+                                horaFim.isBefore(reserva.getHoraInicio())) {
+                            salasLivres.add(sala);
                         }
-                    } else{
-                        salasLivres.add(i + " - sala: " + salas.get(i).getNumero());
+                    } else {
+                        salasLivres.add(sala);
                     }
                 }
             }

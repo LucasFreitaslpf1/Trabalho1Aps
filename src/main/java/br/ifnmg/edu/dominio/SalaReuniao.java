@@ -41,6 +41,10 @@ public class SalaReuniao {
         this.predio = predio;
     }
 
+    public Predio criaPredio(){
+        return new Predio();
+    }
+
     @Override
     public String toString() {
         return "SalaReuniao{" +

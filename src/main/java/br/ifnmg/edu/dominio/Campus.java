@@ -50,10 +50,6 @@ public class Campus {
     public Campus() {
     }
 
-    public Predio criaPredio(){
-        return new Predio();
-    }
-
     public Campus(String nome, String rua, Integer numero, String bairro, String cidade) {
         this.nome = nome;
         this.rua = rua;
